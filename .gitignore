@@ -66,3 +66,11 @@ fastlane/test_output
 
 
 node_modules/
+
+
+.gradle
+.idea
+
+
+
+
