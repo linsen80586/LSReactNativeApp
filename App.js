@@ -6,6 +6,103 @@
  * @flow
  */
 
+import PropTypes from 'prop-types';
+import React, { Component } from 'react';
+import { NavigatorIOS, Text, TouchableHighlight, View ,AppRegistry,StyleSheet,AlertIOS} from 'react-native';
+
+class MyView extends Component {
+
+    _handleBackPress() {
+        this.props.navigator.pop();
+    }
+
+    _handleNextPress(nextRoute) {
+        this.props.navigator.push(nextRoute);
+    }
+
+    render() {
+        const nextRoute = {
+            component: MyScene,
+            title: 'Bar That',
+            passProps: { myProp: 'bar' }
+        };
+        return(
+            <TouchableHighlight onPress={() => this._handleNextPress(nextRoute)}>
+                <Text style={{marginTop: 200, alignSelf: 'center'}}>
+                    See you on the other nav {this.props.myProp}!
+                </Text>
+            </TouchableHighlight>
+        );
+    }
+
+}
+const styles = StyleSheet.create({
+    content:{
+        paddingTop:100
+    }
+
+})
+
+export default class MyApp extends Component {
+    _handleNextButtonPress(){
+        // AlertIOS.alert("Be A Lert");
+        this.refs.nav.push({
+            component: MyScene,
+            title: 'Login'
+        });
+    }
+
+    render() {
+
+        return (
+            <NavigatorIOS
+                ref='nav'
+                initialRoute={{
+                    component: MyView,
+                    title: 'Foo This',
+                    passProps: { myProp: 'foo' },
+                    backgroundColor:'#00ff00',
+                    rightButtonTitle: 'Add',
+                    onRightButtonPress: () => this._handleNextButtonPress(),
+                }}
+                style={{flex: 1}}
+            />
+        );
+    }
+}
+
+class MyScene extends Component {
+    _onForward = () => {
+        this.props.navigator.push({
+            title: 'Scene123',
+            component: MyScene,
+        });
+    }
+
+    render() {
+        return (
+            <View style={styles.content}>
+                <Text>Current Scene: { this.props.title }</Text>
+                <TouchableHighlight onPress={this._onForward}>
+                    <Text>Tap me to load the next scene</Text>
+                </TouchableHighlight>
+                <TouchableHighlight onPress={this._onForward}>
+                    <Text>Tap me to load the next scene</Text>
+                </TouchableHighlight>
+                <TouchableHighlight onPress={this._onForward}>
+                    <Text>Tap me to load the next scene</Text>
+                </TouchableHighlight>
+                <TouchableHighlight onPress={this._onForward}>
+                    <Text>Tap me to load the next scene</Text>
+                </TouchableHighlight>
+            </View>
+        )
+    }
+}
+
+AppRegistry.registerComponent('MyApp', () => MyApp);
+/*
+
 import React, {Component} from 'react';
 import {Platform, StyleSheet, Text, View} from 'react-native';
 import {Button} from 'react-native';
@@ -60,3 +157,6 @@ const styles = StyleSheet.create({
     marginBottom: 5,
   },
 });
+
+
+*/
